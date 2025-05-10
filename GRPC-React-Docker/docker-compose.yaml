@@ -1,0 +1,35 @@
+services: 
+  grpc-server:
+    image: grpc-react-docker
+    ports: 
+      - "8080:8080"
+    networks:
+      - grpc-react-docker
+    environment:
+      - REDIS_ADDR=redis:6379
+    depends_on:
+      - redis
+
+  gateway-envoy:
+    build:
+      dockerfile: dockerfile
+      context: .
+    ports:
+      - "8083:8080"
+    volumes:
+      - ./config/envoy.yaml:/etc/envoy/envoy.yaml
+    networks:
+      - grpc-react-docker
+    
+  redis:
+    image: redis:latest
+    restart: always 
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+
+networks:
+  grpc-react-docker:
+  

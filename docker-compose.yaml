@@ -1,0 +1,28 @@
+services: 
+  grpc-server:
+    image: grpc-react-docker
+    ports: 
+      - "8080:8080"
+
+    networks:
+      - grpc-react-docker
+
+  gateway-envoy:
+    build:
+      dockerfile: dockerfile
+      context: .
+    ports:
+      - "8083:8080"
+    volumes:
+      - ./config/envoy.yaml:/etc/envoy/envoy.yaml
+    networks:
+      - grpc-react-docker
+    
+  redis:
+    image: redis:latest
+    restart: always 
+    
+
+networks:
+  grpc-react-docker:
+  

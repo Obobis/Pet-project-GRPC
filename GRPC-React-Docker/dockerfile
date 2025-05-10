@@ -1,0 +1,13 @@
+FROM golang:1.23.6-alpine 
+
+WORKDIR /app
+
+COPY go.sum ./
+
+COPY . ./
+
+RUN go build -o /grpc-react-docker
+
+EXPOSE 8080
+
+CMD ["/grpc-react-docker"]
